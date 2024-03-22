@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const language = {
-    "fr": "Les Sondages ne sont pas autorisé sur ce serveur.",
+    "fr": "Les sondages ne sont pas autorisés sur ce serveur.",
     "en-US": "Polls are not allowed on this server.",
     "en-GB": "Polls are not allowed on this server.",
     "de": "Umfragen sind auf diesem Server nicht erlaubt.",
