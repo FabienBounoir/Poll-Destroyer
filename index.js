@@ -12,19 +12,25 @@ const language = {
     "it": "I sondaggi non sono consentiti su questo server.",
 }
 
+let pollDeleted = 0;
+
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
     partials: [
         Partials.Channel,
     ],
     presence: {
-        status: "online",
-        activities: [{ name: `🏉`, type: ActivityType.Custom }]
+        status: "dnd",
+        activities: [{ name: `🚨`, type: ActivityType.Custom }]
     }
 });
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
+
+    setInterval(() => {
+        client.user.setActivity(`🗑️ Poll Deleted: ${pollDeleted}`, { type: ActivityType.Custom })
+    }, 30000);
 });
 
 client.on('messageCreate', async (message) => {
@@ -37,7 +43,7 @@ client.on('messageCreate', async (message) => {
     if (message.embeds.length > 0) return
     if (message.attachments.size > 0) return
     if (message.stickers.size > 0) return
-    console.log("🗑️ Deleted: " + message)
+    console.log("🗑️ Deleted: ", message)
 
     message.delete().catch((e) => { console.log("DELETE POLL", e) })
 
@@ -46,6 +52,7 @@ client.on('messageCreate', async (message) => {
         .setColor("#AB2346")
 
     message.author.send({ embeds: [embed] }).catch((e) => { console.log("SEND DIRECT MESSAGE", e) })
+    pollDeleted++
 });
 
 process.on("unhandledRejection", async (reason, promise) => {
